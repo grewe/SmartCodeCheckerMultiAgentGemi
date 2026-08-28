@@ -1,285 +1,593 @@
-# 🎓 Code Review Assistant - Codelab Edition
+# Smart Code Checker — Multi-Agent Gemini
 
-**Learn to build production AI agents with Google ADK**
+A hands-on **multi-agent AI code review system** built with **Google's Agent Development Kit (ADK)** and **Gemini**.
 
-This is the educational codelab branch designed for the "Building a Production AI Code Review Assistant with Google ADK" workshop. You'll progressively build a complete multi-agent system from scratch, learning production patterns along the way.
+This project demonstrates how to move beyond a single general-purpose AI agent and build a structured **multi-agent system** in which specialized agents collaborate to analyze Python source code.
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![ADK](https://img.shields.io/badge/Google%20ADK-1.15%2B-green)
-![Gemini](https://img.shields.io/badge/Gemini-2.5-red)
+The application runs locally using Google ADK and accesses Gemini through the **Gemini Developer API using a Google AI Studio API key**. It does **not require Vertex AI** for local development.
 
-## 🎯 What You'll Build
+The completed system combines:
 
-Starting from a 7-line agent, you'll progressively create:
-
-- **Review Pipeline**: 4 specialized agents (Analyzer → Style Checker → Test Runner → Synthesizer)
-- **Fix Pipeline**: Automated code fixing with iterative refinement (Loop architecture)
-- **Production Tools**: AST parsing, style checking, test generation, progress tracking
-- **State Management**: Multi-tier state with type-safe constants pattern
-- **Cloud Deployment**: Deploy to Agent Engine or Cloud Run with observability
-
-## 📚 Codelab Structure
-
-This branch contains **strategic placeholders** marked with comments like:
-```python
-# MODULE_4_STEP_2_ADD_STATE_STORAGE
-# MODULE_5_STEP_1_STYLE_CHECKER_TOOL
-# MODULE_6_STEP_5_CREATE_FIX_LOOP
-```
-
-You'll replace these placeholders as you progress through the modules, building the system incrementally.
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.10+
-- Google Cloud account with billing enabled
-- `gcloud` CLI installed and authenticated
-- Git
-
-### Setup Instructions
-
-**1. Clone and checkout the codelab branch:**
-```bash
-git clone https://github.com/ayoisio/code-review-assistant.git
-cd code-review-assistant
-git checkout codelab
-```
-
-**2. Create virtual environment:**
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-```
-
-**3. Install dependencies:**
-```bash
-pip install -r code_review_assistant/requirements.txt
-```
-
-**4. Configure your environment:**
-```bash
-cp .env.example .env
-nano .env  # Add your GOOGLE_CLOUD_PROJECT
-```
-
-**5. Start the codelab:**
-
-Follow the workshop at: [Codelab Link](https://your-codelab-url.com)
-
-## 📂 Codelab Branch Structure
-
-```
-code-review-assistant/
-├── code_review_assistant/
-│   ├── agent.py                 # Placeholders for pipelines
-│   ├── config.py                # Complete - no changes needed
-│   ├── constants.py             # Complete - StateKeys defined
-│   ├── tools.py                 # Placeholders for tools (Modules 4-6)
-│   └── sub_agents/
-│       ├── review_pipeline/     # Placeholders (Module 5)
-│       │   ├── code_analyzer.py
-│       │   ├── style_checker.py
-│       │   ├── test_runner.py
-│       │   └── feedback_synthesizer.py
-│       └── fix_pipeline/        # Placeholders (Module 6)
-│           ├── code_fixer.py
-│           ├── fix_test_runner.py
-│           ├── fix_validator.py
-│           └── fix_synthesizer.py
-├── tests/
-│   └── test_agent_engine.py    # Complete - test deployment
-├── deploy.sh                    # Complete - handles all deployments
-└── README.md                    # This file
-```
-
-## 🧩 Module Overview
-
-### Module 3: Your First Agent (15 min)
-- Set up Google Cloud environment
-- Create basic agent with `adk create`
-- Understand limitations of LLM-only approaches
-
-### Module 4: Building Your First Agent (15 min)
-- Create `analyze_code_structure()` tool with AST parsing
-- Add state management with StateKeys constants
-- Use async + thread pools for performance
-- Connect tool to Code Analyzer agent
-
-**Placeholders you'll fill:**
-- `MODULE_4_STEP_2_ADD_STATE_STORAGE`
-- `MODULE_4_STEP_3_ADD_ASYNC`
-- `MODULE_4_STEP_4_EXTRACT_DETAILS`
-- `MODULE_4_STEP_4_HELPER_FUNCTION`
-- `MODULE_4_STEP_5_CREATE_AGENT`
-
-### Module 5: Building a Pipeline (28 min)
-- Add Style Checker with `check_code_style()` tool
-- Add Test Runner with built-in code executor
-- Add Feedback Synthesizer with memory search
-- Wire 4 agents into Sequential pipeline
-- Create root agent
-
-**Placeholders you'll fill:**
-- `MODULE_5_STEP_1_STYLE_CHECKER_TOOL`
-- `MODULE_5_STEP_1_STYLE_HELPERS`
-- `MODULE_5_STEP_1_INSTRUCTION_PROVIDER`
-- `MODULE_5_STEP_1_STYLE_CHECKER_AGENT`
-- `MODULE_5_STEP_2_INSTRUCTION_PROVIDER`
-- `MODULE_5_STEP_2_TEST_RUNNER_AGENT`
-- `MODULE_5_STEP_4_SEARCH_PAST_FEEDBACK`
-- `MODULE_5_STEP_4_UPDATE_GRADING_PROGRESS`
-- `MODULE_5_STEP_4_SAVE_GRADING_REPORT`
-- `MODULE_5_STEP_4_INSTRUCTION_PROVIDER`
-- `MODULE_5_STEP_4_SYNTHESIZER_AGENT`
-- `MODULE_5_STEP_5_CREATE_PIPELINE`
-
-### Module 6: Adding the Fix Pipeline (35 min)
-- Add Code Fixer agent
-- Add Fix Test Runner agent
-- Add Fix Validator with loop exit logic
-- Create LoopAgent with max 3 iterations
-- Add Fix Synthesizer
-- Wire fix pipeline with review pipeline
-
-**Placeholders you'll fill:**
-- `MODULE_6_STEP_1_CODE_FIXER_INSTRUCTION_PROVIDER`
-- `MODULE_6_STEP_1_CODE_FIXER_AGENT`
-- `MODULE_6_STEP_2_FIX_TEST_RUNNER_INSTRUCTION_PROVIDER`
-- `MODULE_6_STEP_2_FIX_TEST_RUNNER_AGENT`
-- `MODULE_6_STEP_3_VALIDATE_FIXED_STYLE`
-- `MODULE_6_STEP_3_COMPILE_FIX_REPORT`
-- `MODULE_6_STEP_3_EXIT_FIX_LOOP`
-- `MODULE_6_STEP_3_FIX_VALIDATOR_INSTRUCTION_PROVIDER`
-- `MODULE_6_STEP_3_FIX_VALIDATOR_AGENT`
-- `MODULE_6_STEP_5_CREATE_FIX_LOOP`
-- `MODULE_6_STEP_5_UPDATE_ROOT_AGENT`
-- `MODULE_6_STEP_6_FIX_SYNTHESIZER_INSTRUCTION_PROVIDER`
-- `MODULE_6_STEP_6_FIX_SYNTHESIZER_AGENT`
-- `MODULE_6_STEP_6_SAVE_FIX_REPORT`
-
-### Module 7: Deploying to Production (30 min)
-- Deploy to Agent Engine with `./deploy.sh agent-engine`
-- Test deployed agent
-- Monitor with Cloud Trace
-
-### Module 8: Production Observability (20 min)
-- Access Cloud Trace Explorer
-- Read waterfall charts
-- Understand performance characteristics
-- Identify bottlenecks
-
-## 🧪 Testing Your Progress
-
-After each module, test your agent:
-
-```bash
-# Module 4 - Test analyzer only
-adk run code_review_assistant --agent=code_analyzer
-
-# Module 5 - Test complete review pipeline
-adk run code_review_assistant
-
-# Module 6 - Test with fix pipeline
-adk run code_review_assistant
-# Submit buggy code, accept fix offer
-
-# Module 7 - Test deployed agent
-python tests/test_agent_engine.py
-```
-
-## 🔍 Key Learning Objectives
-
-By completing this codelab, you'll master:
-
-- **Tool Integration**: Building deterministic tools (AST, linters) vs LLM-only approaches
-- **Sequential Pipelines**: Orchestrating multiple agents with state flow
-- **Loop Architecture**: Iterative refinement with exit conditions (`escalate`)
-- **State Management**: Three-tier state (temp/session/user) with type-safe constants
-- **Dynamic Instructions**: Context providers that inject state into prompts
-- **Production Deployment**: Using `deploy.sh` for Agent Engine and Cloud Run
-- **Observability**: Reading Cloud Trace to understand agent behavior
-
-## 🎓 Comparing Branches
-
-| Aspect | Codelab Branch | Main Branch |
-|--------|----------------|-------------|
-| Purpose | Educational, step-by-step | Production-ready reference |
-| Code | Placeholders with comments | Complete implementations |
-| Use Case | Learning by building | Reference or deployment |
-| Documentation | Inline guidance | API-style docs |
-
-## 💡 Tips for Success
-
-**Follow the placeholders in order:**
-- Module 4 → Module 5 → Module 6 → Module 7 → Module 8
-- Each module builds on the previous one
-
-**Test frequently:**
-- After completing each step, run your agent
-- Verify tools work before adding agents
-- Check state flows correctly between agents
-
-**Use the constants:**
-- Always use `StateKeys.CODE_TO_REVIEW` instead of `"code_to_review"`
-- This prevents typos that break multi-agent pipelines
-
-**Read the aside boxes:**
-- They explain WHY certain patterns are used
-- They highlight common mistakes to avoid
-
-**Compare with main branch if stuck:**
-- The main branch has complete implementations
-- Use it as a reference, not copy-paste
-
-## 🆘 Troubleshooting
-
-**"Module placeholder not found":**
-- Ensure you're on the `codelab` branch: `git branch`
-- Pull latest changes: `git pull origin codelab`
-
-**"Import errors after adding code":**
-- Check you replaced the ENTIRE placeholder, not just part of it
-- Verify indentation matches surrounding code
-
-**"Agent doesn't call my tool":**
-- Check tool is in the agent's `tools=[...]` list
-- Verify function name matches exactly
-- Look at agent instruction - does it tell LLM to use the tool?
-
-**"State key returns None":**
-- Check spelling matches `StateKeys` constant exactly
-- Verify previous agent actually wrote to that key
-- Use `print(tool_context.state)` to debug
-
-**"Loop never exits":**
-- Ensure `exit_fix_loop()` tool sets `tool_context.actions.escalate = True`
-- Check validator's instruction tells it to call this tool when successful
-- Verify `max_iterations=3` is set on LoopAgent
-
-## ✅ Completion Checklist
-
-After finishing the codelab, you should have:
-
-- [ ] Complete review pipeline (4 agents working sequentially)
-- [ ] Complete fix pipeline (loop + synthesizer)
-- [ ] All tools implemented and tested
-- [ ] Deployed to Agent Engine or Cloud Run
-- [ ] Verified with `tests/test_agent_engine.py`
-- [ ] Reviewed traces in Cloud Trace Explorer
-- [ ] Understanding of all production patterns
-
-## 🎉 Next Steps
-
-Once you complete the codelab:
-
-1. **Switch to main branch** to see the complete production code
-2. **Customize the assistant** for your specific use case
-3. **Add new languages** beyond Python
-4. **Integrate with GitHub** for automated PR reviews
-5. **Build your own agent** using these patterns
+- Google ADK
+- Gemini models
+- Python Abstract Syntax Trees (AST)
+- Deterministic Python tools
+- PEP 8 analysis with `pycodestyle`
+- AI-generated test execution
+- ADK shared session state
+- Sequential multi-agent orchestration
+- Synthesized code-review feedback
 
 ---
 
-Built with ❤️ using Google ADK and Gemini
+## Architecture
+
+The Code Review Assistant uses a sequential pipeline of four specialized agents:
+
+```text
+Python Code
+    |
+    v
++-----------------------+
+|     CodeAnalyzer      |
+|   AST / Structure     |
++-----------+-----------+
+            |
+            v
++-----------------------+
+|     StyleChecker      |
+|   PEP 8 / Naming      |
++-----------+-----------+
+            |
+            v
++-----------------------+
+|      TestRunner       |
+| Generate + Run Tests  |
++-----------+-----------+
+            |
+            v
++-----------------------+
+| FeedbackSynthesizer   |
+|     Final Review      |
++-----------+-----------+
+            |
+            v
+   Comprehensive Report
+```
+
+The agents execute in sequence:
+
+```text
+CodeAnalyzer
+     |
+     v
+StyleChecker
+     |
+     v
+TestRunner
+     |
+     v
+FeedbackSynthesizer
+```
+
+Intermediate results are stored in **ADK shared session state**, allowing later agents to use results generated by earlier agents.
+
+---
+
+## Why Use a Multi-Agent Architecture?
+
+A simple code reviewer could ask one Gemini model to analyze everything in a single prompt.
+
+This project instead divides the problem among specialized agents.
+
+### Separation of Concerns
+
+Each agent has a focused responsibility:
+
+- **CodeAnalyzer** — What does the program structurally contain?
+- **StyleChecker** — How well does the program follow Python style conventions?
+- **TestRunner** — What happens when the program is tested?
+- **FeedbackSynthesizer** — What do all of these results mean together?
+
+### Deterministic Evidence + AI Reasoning
+
+The system does not ask an LLM to determine everything.
+
+Instead:
+
+```text
+Python AST
+    |
+    v
+Actual program structure
+
+pycodestyle
+    |
+    v
+Actual PEP 8 violations
+
+BuiltInCodeExecutor
+    |
+    v
+Actual test execution
+
+Gemini
+    |
+    v
+Interpretation and explanation
+```
+
+This allows Gemini to reason from evidence produced by deterministic software.
+
+### Modularity
+
+Individual agents, tools, prompts, and models can be changed independently.
+
+### Shared Context
+
+Agents communicate through ADK session state so later stages can build on earlier analysis.
+
+---
+
+## Main Project Files
+
+| File | Purpose |
+|---|---|
+| `requirements.txt` | Specifies the Python package dependencies and versions used by the project. |
+| `.env` | Stores runtime configuration, including the Google AI Studio API key and Gemini model selections. **Never commit this file to GitHub.** |
+| `agent.py` | Defines the root Code Review Assistant and its `SequentialAgent` pipeline: **CodeAnalyzer → StyleChecker → TestRunner → FeedbackSynthesizer**. |
+| `tools.py` | Contains deterministic Python tools and helper functions, including AST structure analysis, style checking/scoring, and feedback/report support functions. |
+| `sub_agents/review_pipeline/code_analyzer.py` | Defines `code_analyzer_agent`, which uses structural analysis to summarize functions, classes, imports, docstrings, and program metrics. |
+| `sub_agents/review_pipeline/style_checker.py` | Defines `style_checker_agent`, which uses style-checking tools and structural context to explain PEP 8 and naming issues. |
+| `sub_agents/review_pipeline/test_runner.py` | Defines `test_runner_agent`, which generates tests, executes them with ADK's `BuiltInCodeExecutor`, and analyzes the results. |
+| `sub_agents/review_pipeline/feedback_synthesizer.py` | Defines `feedback_synthesizer_agent`, which combines structure, style, and test results into the final code-review report. |
+
+---
+
+## How the Agents Share Information
+
+ADK session state acts as a communication channel between the specialized agents.
+
+Conceptually:
+
+```text
+Submitted Python Code
+        |
+        v
+    CodeAnalyzer
+        |
+        | structure analysis
+        v
+    StyleChecker
+        |
+        | style analysis
+        v
+     TestRunner
+        |
+        | test results
+        v
+ FeedbackSynthesizer
+        |
+        v
+   Final Feedback
+```
+
+Named output/state values allow results from one stage to be reused by later stages.
+
+---
+
+## CodeAnalyzer
+
+The **CodeAnalyzer** is the first specialized agent.
+
+It uses Python's **Abstract Syntax Tree (AST)** to determine the actual structure of the submitted Python program.
+
+The analysis can identify information such as:
+
+- Functions
+- Async functions
+- Classes
+- Methods
+- Function arguments
+- Imports
+- Docstrings
+- Decorators
+- Base classes
+- Line counts
+- Function counts
+- Class counts
+- Import counts
+- Presence of `main()`
+- Presence of a `__main__` guard
+- Average function length
+
+Rather than asking Gemini to guess what structures exist in the source code, Python's `ast` module provides deterministic syntactic information.
+
+Python AST documentation:
+
+https://docs.python.org/3/library/ast.html
+
+---
+
+## StyleChecker
+
+The **StyleChecker** analyzes Python style and naming conventions.
+
+It combines:
+
+```text
+pycodestyle
+     +
+Python AST checks
+     +
+Gemini explanation
+```
+
+The deterministic tools identify issues, while Gemini explains the results in a form useful to a programmer or student.
+
+---
+
+## TestRunner
+
+The **TestRunner** investigates the behavior of the submitted program.
+
+It uses ADK's:
+
+```python
+BuiltInCodeExecutor
+```
+
+to support code execution during the agent workflow.
+
+The agent can generate tests, execute them, examine the results, and identify possible problems or unexpected behavior.
+
+---
+
+## FeedbackSynthesizer
+
+The **FeedbackSynthesizer** is the final specialized agent.
+
+Instead of analyzing the original program in isolation, it receives information produced by the previous stages and synthesizes it into a comprehensive review.
+
+The final feedback can combine:
+
+- Program structure
+- Style compliance
+- Test results
+- Strengths
+- Problems
+- Recommendations
+- Suggested next steps
+
+---
+
+## Gemini Models
+
+The application separates Gemini usage into **worker** and **critic** roles.
+
+The classroom/free-tier configuration uses:
+
+```env
+WORKER_MODEL=gemini-3.5-flash-lite
+CRITIC_MODEL=gemini-3.6-flash-lite
+```
+
+The worker model is appropriate for routine analysis where deterministic tools already provide much of the evidence.
+
+The critic model is used for work requiring more reasoning, such as testing and synthesizing results.
+
+A more capable critic model may produce better results when sufficient API quota is available.
+
+---
+
+## Requirements
+
+This version of the project is designed for local development using:
+
+- Python
+- Google ADK 2.7.1
+- Google AI Studio
+- Gemini Developer API
+- A Gemini API key
+- Available Gemini API quota
+
+Google Cloud / Vertex AI deployment is **not required** to run the project locally.
+
+---
+
+## 1. Clone the Repository
+
+```bash
+git clone https://github.com/grewe/SmartCodeCheckerMultiAgentGemi.git
+cd SmartCodeCheckerMultiAgentGemi
+```
+
+---
+
+## 2. Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+### Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+### macOS / Linux
+
+```bash
+source .venv/bin/activate
+```
+
+When activation succeeds, your command prompt should begin with something similar to:
+
+```text
+(.venv)
+```
+
+A virtual environment isolates this project's Python packages from packages used by other Python projects on your computer.
+
+---
+
+## 3. Install the Dependencies
+
+From the repository root:
+
+```bash
+pip install -r code_review_assistant/requirements.txt
+pip install -e .
+```
+
+Verify ADK:
+
+```bash
+adk --version
+```
+
+This project was developed using:
+
+```text
+Google ADK 2.7.1
+```
+
+You can also check the installed dependencies with:
+
+```bash
+pip check
+```
+
+---
+
+## 4. Create a Google AI Studio API Key
+
+This project uses the **Gemini Developer API through Google AI Studio**.
+
+1. Open Google AI Studio:
+
+   https://aistudio.google.com/
+
+2. Sign in with your Google account.
+
+3. Create or select a project.
+
+4. Open **API Keys**.
+
+5. Create a Gemini API key for the project.
+
+6. Keep the key private.
+
+Do **not** put your API key directly into Python source files.
+
+---
+
+## 5. Configure `.env`
+
+The repository contains an `.env.example` file.
+
+Create your own `.env` file from it.
+
+### Windows
+
+```bash
+copy .env.example .env
+```
+
+### macOS / Linux
+
+```bash
+cp .env.example .env
+```
+
+Configure the file with your API key and model selections:
+
+```env
+GOOGLE_GENAI_USE_VERTEXAI=FALSE
+GOOGLE_API_KEY=YOUR_AI_STUDIO_API_KEY
+
+WORKER_MODEL=gemini-3.5-flash-lite
+CRITIC_MODEL=gemini-3.6-flash-lite
+```
+
+Replace:
+
+```text
+YOUR_AI_STUDIO_API_KEY
+```
+
+with your actual Gemini API key.
+
+---
+
+## 6. Run the Multi-Agent Application
+
+From the repository root:
+
+```bash
+adk web
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
+
+in your browser.
+
+Select the Code Review Assistant and submit Python source code for review.
+
+---
+
+## Testing the System
+
+A useful test is to submit a small Python function and observe how the review progresses through the agents.
+
+For example:
+
+```python
+def add(a,b):
+    return a+b
+```
+
+The complete pipeline should execute:
+
+```text
+CodeAnalyzer
+     |
+     v
+StyleChecker
+     |
+     v
+TestRunner
+     |
+     v
+FeedbackSynthesizer
+     |
+     v
+Final Code Review
+```
+
+ADK Web can also be used to inspect the execution events and intermediate state produced by the application.
+
+---
+
+## Google AI Studio Free-Tier Quotas
+
+Google AI Studio free-tier API usage is limited.
+
+A single user request to this application may result in **multiple Gemini requests** because several agents participate in the pipeline.
+
+To conserve quota:
+
+- Test deterministic Python code locally before running the entire agent system.
+- Compile modified Python files before testing the complete pipeline.
+- Avoid repeatedly running the multi-agent system while making small code changes.
+- Run AI-based tests at meaningful development milestones.
+- Check the project's current quota in:
+
+```text
+Google AI Studio
+    ->
+Dashboard
+    ->
+Rate Limit
+```
+
+Quota and model availability can change over time.
+
+---
+
+## Security
+
+### Never commit your `.env` file
+
+The repository's `.gitignore` excludes:
+
+```text
+.env
+```
+
+while allowing:
+
+```text
+.env.example
+```
+
+to remain in the repository.
+
+Never commit:
+
+- Gemini API keys
+- `.env`
+- Google Cloud credentials
+- Service account keys
+- OAuth tokens
+- Other secrets
+
+If an API key is accidentally committed to a public repository, revoke the key and create a new one.
+
+---
+
+## Educational Purpose
+
+This project is designed as a hands-on example of **programming AI agents and multi-agent systems**.
+
+It demonstrates the progression from:
+
+```text
+LLM
+ |
+ v
+Single AI Agent
+ |
+ v
+Agent + Tools
+ |
+ v
+Shared State
+ |
+ v
+Specialized Agents
+ |
+ v
+Multi-Agent System
+```
+
+A central design principle of the project is:
+
+> **Use deterministic software for facts, AI models for reasoning and explanation, and agents to organize the workflow.**
+
+---
+
+## Relationship to the Google ADK Codelab
+
+This project is an educational adaptation of Google's:
+
+**Building a Production AI Code Review Assistant with Google ADK**
+
+Original codelab:
+
+https://codelabs.developers.google.com/adk-code-reviewer-assistant/instructions
+
+The original codelab is production-oriented and uses Google Cloud / Vertex AI.
+
+This version was modified for classroom and workshop use so the multi-agent application can run **locally** while accessing Gemini through a **Google AI Studio API key**.
+
+It also updates the project to **Google ADK 2.7.1** and uses Gemini model selections suitable for the workshop environment.
+
+---
+
+## Technologies
+
+**Google ADK • Gemini • Python • Multi-Agent Systems • AI Agents • AST • pycodestyle • BuiltInCodeExecutor • Shared State • SequentialAgent**
+
+---
+
+## License and Attribution
+
+This repository is based on and adapted from Google's ADK Code Review Assistant codelab and associated example code.
+
+Please refer to the original project's licensing terms and attribution requirements when redistributing or modifying code derived from that project.
